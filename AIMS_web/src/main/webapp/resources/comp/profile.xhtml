@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:includes="http://xmlns.jcp.org/jsf/composite/includes">
+    <h:body>
+        <ui:composition template="/content/aims/index.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <h1>Profile</h1>
+                    <p:fieldset legend="Personal Data">
+                        <includes:memberData member="#{profile.member}"/>
+                    </p:fieldset>
+                    <p:fieldset legend="Avatar">
+                        <p:graphicImage value="#{imageHelper.getImageById(profile.member)}" style="height: 128px; width: 128px;" alt="Error">
+                            <f:param id="memberid" name="member_id" value="#{profile.member.id}" />
+                        </p:graphicImage>
+                    </p:fieldset>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="member" required="true"/>
+        <cc:attribute name="allFieldsReadOnly" required="false" default="true"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:messages id="errorsDialog"/>
+        <p:panelGrid columns="3" >
+            <p:outputLabel for="d_name" value="#{msg.lastname}"/>
+            <p:inputText id="d_name" value="#{cc.attrs.member.lastname}"
+                         validator="#{registerValidator.nameValidator}" 
+                         required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
+            <p:message for="d_name" display="icon"/>
+
+            <p:outputLabel for="d_forename" value="#{msg.forename}"/>
+            <p:inputText id="d_forename" value="#{cc.attrs.member.forename}" 
+                         validator="#{registerValidator.nameValidator}" 
+                         required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
+            <p:message for="d_forename" display="icon"/>
+
+            <p:outputLabel for="d_email" value="#{msg.emailaddress}"/>
+            <p:inputText id="d_email" value="#{cc.attrs.member.email}" 
+                         validator="#{registerValidator.mailValidator}" 
+                         required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
+            <p:message for="d_email" display="icon"/>
+
+            <p:outputLabel for="d_pw" value="#{msg.password}"/>
+            <p:password id="d_pw" value="#{cc.attrs.member.password}" 
+                        validator="#{registerValidator.passwordValidator}" 
+                        required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
+            <p:message for="d_pw" display="icon"/>
+            
+            
+        </p:panelGrid>
+    </cc:implementation>
+</html>

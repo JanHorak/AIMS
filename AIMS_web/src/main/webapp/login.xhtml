@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Login</title>
+                <h:outputStylesheet name="css/AIMSCSS.css"/>
+            </f:facet>
+        </h:head>
+        <h:body>
+            <h:form id="loginform">
+                <p:messages id="errors"/>
+                <p:panelGrid columns="3" styleClass="login" id="loginPanel" >
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column colspan="3">
+                                #{msg.login_header}
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                    <p:outputLabel for="name" value="#{msg.emailaddress}"/>
+                    <p:inputText id="name" value="#{login.member.email}" 
+                                 required="true"/>
+                    <p:message for="name" display="icon"/>
+                    <p:outputLabel for="pw" value="#{msg.password}"/>
+                    <p:password id="pw" value="#{login.member.password}" required="true"/>
+                    <p:message for="pw" display="icon"/>
+                    <p:commandButton value="#{msg.login_header}" action="#{login.login()}" styleClass="primary" update="loginform"/>
+                    <p:commandButton value="#{msg.register}" onclick="PF('regDialog').show();"/>
+                </p:panelGrid>
+            </h:form>
+
+
+            <p:dialog   modal="true" widgetVar="regDialog" styleClass="registerDialog" header="#{msg.register_header}" resizable="false">
+                <h:form id="registerDialog">
+                    <p:messages id="errorsDialog"/>
+                    <comp:registerData id="registerData" member="#{register.member}"/>
+                    <p:commandButton value="#{msg.register}" action="#{register.register()}"  
+                                     type="submit" styleClass="primary"
+                                     update="@this" onsuccess="PF('regDialog').hide();"/>
+                    <p:commandButton value="Close" onclick="PF('regDialog').hide();"/>
+
+                </h:form>
+            </p:dialog>
+        </h:body>
+    </f:view>
+
+</html>

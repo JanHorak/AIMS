@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition>
+            <h:form>
+                <p:growl id="messages" showDetail="true" />
+                <p:toolbar class="headerBar">
+                    <f:facet name="left">
+                        <p:commandButton value="#{msg.profile}" action="#{navBean.toProfile()}" icon="ui-icon-document" />
+                        <span class="ui-separator">
+                            <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                        </span>
+                            <p:commandButton value="#{msg.manage_members}" action="#{navBean.toMemberManagement()}"  icon="ui-icon-contact" />
+                            <p:outputLabel value="Welcome #{profile.member.forename} #{profile.member.lastname}"/>
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:commandButton value="#{msg.logout}" icon="ui-icon-extlink" action="#{logout.logout()}" styleClass="primary"/>
+                    </f:facet>
+                </p:toolbar>
+            </h:form>
+        </ui:composition>
+    </body>
+</html>
