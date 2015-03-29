@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+        </h:head>
+        <h:body>
+            <p:messages id="errorsDialog"/>
+            <p:panelGrid columns="3" >
+                <p:outputLabel for="d_name" value="#{msg.lastname}"/>
+                <p:inputText id="d_name" value="#{register.member.lastname}"
+                             validator="#{registerValidator.nameValidator}" 
+                             required="true"/>
+                <p:message for="d_name" display="icon"/>
+
+                <p:outputLabel for="d_forename" value="#{msg.forename}"/>
+                <p:inputText id="d_forename" value="#{register.member.forename}" 
+                             validator="#{registerValidator.nameValidator}" 
+                             required="true"/>
+                <p:message for="d_forename" display="icon"/>
+
+                <p:outputLabel for="d_email" value="#{msg.emailaddress}"/>
+                <p:inputText id="d_email" value="#{register.member.email}" 
+                             validator="#{registerValidator.mailValidator}" 
+                             required="true"/>
+                <p:message for="d_email" display="icon"/>
+
+                <p:outputLabel for="d_pw" value="#{msg.password}"/>
+                <p:password id="d_pw" value="#{register.member.password}" 
+                            validator="#{registerValidator.passwordValidator}" 
+                            required="true"/>
+                <p:message for="d_pw" display="icon"/>
+
+                <p:outputLabel for="dc_pw" value="#{msg.password_confirm}"/>
+                <p:password id="dc_pw" value="#{register.member.password}" 
+                            required="true"/>
+                <p:message for="dc_pw" display="icon"/>
+            </p:panelGrid>
+        </h:body>
+    </f:view>
+
+</html>

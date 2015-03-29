@@ -1,0 +1,65 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 10.03.2015, 21:10:07
+    Author     : Jan
+*/
+
+.ui-toolbar.headerBar {
+    height: 35px;
+}
+
+.ui-panelgrid.login {
+    position : absolute;    
+    width    : 200px;
+    height   : 200px;
+    left     : 50%;
+    top      : 50%;
+    margin-left : -100px; /* half of the width  */
+    margin-top  : -100px; /* half of the height */
+    border-color: white;
+}
+.ui-panelgrid td, .ui-panelgrid tr
+{
+    border-style: none !important;
+}
+
+.ui-button.primary {
+    background: none;
+    color: white;
+    background-color: #045FB4 !important;
+}
+
+.ui-button.primary:hover {
+    background: none;
+    color: white;
+    background-color: #58ACFA !important;
+}
+
+body {
+    font-size: 14px;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+}
+
+.ui-dialog.registerDialog {
+    width: 500px !important;
+    height: 400px !important;
+    top: 100%;
+    bottom: 100%;
+}
+
+.ui-panelgrid tr,
+.ui-panelgrid td {
+    border: none;
+    top: 100%;
+    bottom: 100%;
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+}
+
+.ui-messages-info, .ui-messages-warn, .ui-messages-error, .ui-messages-fatal {
+    font-size: 12px;
+}
