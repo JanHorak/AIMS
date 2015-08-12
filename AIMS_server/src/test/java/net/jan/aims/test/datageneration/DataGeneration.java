@@ -8,20 +8,21 @@ package net.jan.aims.test.datageneration;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import net.jan.aims.aims_server.entities.AIMSMember;
-import net.jan.aims.aims_server.entities.Rank;
-import net.jan.aims.aims_server.enums.EnumGroup;
-import net.jan.aims.aims_server.enums.EnumRank;
-import net.jan.aims_server.utilities.Utilities;
+import net.jan.aims.aimsserver.entities.AIMSMember;
+import net.jan.aims.aimsserver.entities.Rank;
+import net.jan.aims.aimsserver.enums.EnumGender;
+import net.jan.aims.aimsserver.enums.EnumGroup;
+import net.jan.aims.aimsserver.enums.EnumPost;
+import net.jan.aims.aimsserver.enums.EnumRank;
+import net.jan.aims.aimsserver.utilities.Utilities;
+import static org.hamcrest.CoreMatchers.is;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -30,15 +31,11 @@ import static org.junit.Assert.*;
  * @author Jan
  */
 public class DataGeneration {
-
-    public DataGeneration() {
-    }
     
     @Test
     public void loadRankImages(){
         final String DIRpath = getClass().getClassLoader().getResource("images/ranks").getFile();
         final URL files = getClass().getClassLoader().getResource("images/ranks");
-        List<Rank> ranks = new ArrayList<>();
         File f = null;
         try {
             f = new File(files.toURI()).getAbsoluteFile();
@@ -52,8 +49,7 @@ public class DataGeneration {
             r.setName(path);
             r.setEnumRank(EnumRank.getEnumByFileName(path));
             r.setFileData(Utilities.getBytesOfFile(DIRpath.concat("/").concat(path)));
-            assertTrue(!r.getName().isEmpty());
-            System.out.println(r.toString());
+            assertFalse("Name of the Rank was empty." ,r.getName().isEmpty());
         }
         
     }
@@ -84,7 +80,9 @@ public class DataGeneration {
         clark.setEmail("clark@aims.de");
         clark.setForename("Clark");
         clark.setLastname("Kämmt");
+        clark.setGender(EnumGender.Male);
         clark.setRank(EnumRank.Admiral);
+        clark.setPost(EnumPost.RSKB);
         clark.setApplicant(false);
         clark.setPassword("jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=");
         
@@ -96,10 +94,12 @@ public class DataGeneration {
         AIMSMember badMan = new AIMSMember();
         badMan.setAdminrights(false);
         badMan.setAvatar(badAvatarStream);
+        badMan.setGender(EnumGender.Male);
         badMan.setEmail("bad@aims.de");
         badMan.setForename("Bad");
         badMan.setLastname("Man");
         badMan.setRank(EnumRank.Cadet);
+        badMan.setPost(EnumPost.SSTFExVoto);
         badMan.setApplicant(false);
         badMan.setPassword("jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=");
         
@@ -115,12 +115,12 @@ public class DataGeneration {
         m2.setEmail("app@web.de");
         m2.setForename("MyName");
         m2.setLastname("MyOtherName");
-        m2.setRank(EnumRank.Cadet);
+        m2.setGender(EnumGender.Female);
         m2.setApplicant(true);
         m2.setPassword("jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=");
         
         Set<String> group3 = new HashSet<>();
-        group3.add(EnumGroup.Member.name());
+        group3.add(EnumGroup.Applicant.name());
 
         m2.setSystemGroup(group3);
         
@@ -129,7 +129,12 @@ public class DataGeneration {
         em.persist(clark);
         em.persist(badMan);
         em.getTransaction().commit();
+        
+        int numberOfUsers = em.createQuery("SELECT u FROM AIMSMember u").getResultList().size();
+        
         em.close();
+        
+        assertThat("Other Result is expected.", numberOfUsers, is(3));
     }
 
 }

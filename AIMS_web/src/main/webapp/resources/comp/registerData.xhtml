@@ -2,7 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:util='http://xmlns.jcp.org/jsf/composite/comp/util'>
 
     <!-- INTERFACE -->
     <cc:interface>
@@ -12,34 +15,60 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <p:panelGrid columns="3" >
-            <p:outputLabel for="d_name" value="#{msg.lastname}"/>
-            <p:inputText id="d_name" value="#{cc.attrs.member.lastname}"
-                         validator="#{registerValidator.nameValidator}" 
-                         required="true"/>
-            <p:message for="d_name" display="icon"/>
-
             <p:outputLabel for="d_forename" value="#{msg.forename}"/>
             <p:inputText id="d_forename" value="#{cc.attrs.member.forename}" 
                          validator="#{registerValidator.nameValidator}" 
                          required="true"/>
             <p:message for="d_forename" display="icon"/>
 
-            <p:outputLabel for="d_email" value="#{msg.emailaddress}"/>
-            <p:inputText id="d_email" value="#{cc.attrs.member.email}" 
-                         validator="#{registerValidator.mailValidator}" 
+            <p:outputLabel for="d_name" value="#{msg.lastname}"/>
+            <p:inputText id="d_name" value="#{cc.attrs.member.lastname}" widgetVar="d_name"
+                         validator="#{registerValidator.nameValidator}" 
                          required="true"/>
+            <p:message for="d_name" display="icon"/>
+
+            <p:outputLabel for="radiogender" value="#{msg.gender}"/>
+            <p:selectOneRadio id="radiogender" value="#{register.selectedGender}"  layout="grid" columns="3" required="true">
+                <f:selectItems value="#{register.gender}" var="g" itemLabel="#{g.toString()}" itemValue="#{g}"/>
+            </p:selectOneRadio>
+            <p:message for="radiogender" display="icon"/>
+
+            <p:outputLabel for="d_email" value="#{msg.emailaddress}"/>
+            <p:inputText id="d_email" widgetVar="d_email" value="#{cc.attrs.member.email}" 
+                         validator="#{generalValidator.mailValidator}" 
+                         required="true" >
+            </p:inputText>
             <p:message for="d_email" display="icon"/>
 
             <p:outputLabel for="d_pw" value="#{msg.password}"/>
-            <p:password id="d_pw" value="#{cc.attrs.member.password}" 
-                        validator="#{registerValidator.passwordValidator}" 
-                        required="true"/>
+            <p:password id="d_pw" value="#{cc.attrs.member.password}" widgetVar="d_pw"
+                        validator="#{generalValidator.passwordValidator}" 
+                        required="true" onkeydown="AIMS.processPasswordSecurity()">
+            </p:password>
             <p:message for="d_pw" display="icon"/>
 
+            <p:outputLabel id="weightDesc" value="" style="font-size: small"/>
+            <util:passwordWeight/>
+            <div/>
+
             <p:outputLabel for="d_pwc" value="#{msg.confirm}"/>
-            <p:password id="d_pwc" value="#{cc.attrs.member.password}" 
-                        required="true"/>
-            <p:message for="d_pwc" display="icon"/>
+            <p:password id="d_pwc" value="#{cc.attrs.member.password}" widgetVar="passwordConfirm"
+                        required="true" onkeyup="pwComparison();">
+            </p:password>
+            <h:graphicImage id="confirmImage" library="images" name="NOk.png" />
         </p:panelGrid>
+
+        <script type="text/javascript" >
+            function pwComparison(){
+                var pw = $("[id$='d_pw']").val();
+                var pwc = $("[id$='d_pwc']").val();
+                if (pw !== pwc){
+                    $("[id$='confirmImage']").attr('src', 'resources/images/NOk.png');
+                } else {
+                    $("[id$='confirmImage']").attr('src', 'resources/images/Ok.png');
+                }
+            }
+        </script>
+
     </cc:implementation>
 </html>

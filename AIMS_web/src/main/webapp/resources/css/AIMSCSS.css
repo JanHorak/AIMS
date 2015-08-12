@@ -22,9 +22,11 @@ and open the template in the editor.
     margin-top  : -100px; /* half of the height */
     border-color: white;
 }
-.ui-panelgrid td, .ui-panelgrid tr
-{
-    border-style: none !important;
+
+.ui-panel.passwordweight {
+    height: 0.1px !important;
+    width: 35px;
+    padding-top: 0px;
 }
 
 .ui-button.primary {
@@ -39,14 +41,66 @@ and open the template in the editor.
     background-color: #58ACFA !important;
 }
 
+.ui-button.other {
+    background: none;
+    color: white;
+    background-color: #6A57E2 !important;
+}
+
+.ui-button.other:hover {
+    background: none;
+    color: white;
+    background-color: #A499EB !important;
+}
+
+
+.ui-button.cancel {
+    background: none;
+    color: white;
+    background-color: #CF1C1C !important;
+}
+
+.ui-button.cancel:hover {
+    background: none;
+    color: white;
+    background-color: #E61616 !important;
+}
+
+.ui-button.layerOneYes {
+    background: none;
+    color: white;
+    background-color: #1C7B32 !important;
+}
+
+.ui-button.layerOneYes:hover {
+    background: none;
+    color: white;
+    background-color: #1FC144 !important;
+}
+
+.ui-button.layerOneNo {
+    background: none;
+    color: white;
+    background-color: #F65265 !important;
+}
+
+.ui-button.layerOneNo:hover {
+    background: none;
+    color: white;
+    background-color: #F5828F !important;
+}
+
+
+
+
 body {
     font-size: 14px;
     font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
 }
 
 .ui-dialog.registerDialog {
-    width: 500px !important;
-    height: 400px !important;
+    width: 435px !important;
+    height: 350px !important;
     top: 100%;
     bottom: 100%;
 }
@@ -58,8 +112,13 @@ body {
     bottom: 100%;
     overflow-y: hidden !important;
     overflow-x: hidden !important;
+    border-style: none !important;
 }
 
 .ui-messages-info, .ui-messages-warn, .ui-messages-error, .ui-messages-fatal {
     font-size: 12px;
+}
+
+.confirmDialogRank {
+    margin-left: 63px;
 }

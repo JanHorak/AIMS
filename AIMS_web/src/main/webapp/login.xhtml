@@ -2,10 +2,8 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
 
@@ -15,11 +13,12 @@
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
                 <title>Login</title>
                 <h:outputStylesheet name="css/AIMSCSS.css"/>
+                <script type="text/javascript" src="resources/js/AIMS.js"></script>
             </f:facet>
         </h:head>
         <h:body>
-            <h:form id="loginform">
-                <p:messages id="errors"/>
+            <h:form id="loginform" prependId="false">
+                <p:growl id="loginGrowl" showDetail="false" sticky="true"/>
                 <p:panelGrid columns="3" styleClass="login" id="loginPanel" >
                     <f:facet name="header">
                         <p:row>
@@ -28,28 +27,31 @@
                             </p:column>
                         </p:row>
                     </f:facet>
-                    <p:outputLabel for="name" value="#{msg.emailaddress}"/>
-                    <p:inputText id="name" value="#{login.member.email}" 
-                                 required="true"/>
-                    <p:message for="name" display="icon"/>
+
+                    <p:outputLabel for="email" value="#{msg.emailaddress}"/>
+                    <p:inputText id="email" value="11111111" widgetVar="email"
+                                 required="true" validator="#{generalValidator.mailValidator}"/>
+                    <p:message for="email" display="icon"/>
                     <p:outputLabel for="pw" value="#{msg.password}"/>
                     <p:password id="pw" value="#{login.member.password}" required="true"/>
                     <p:message for="pw" display="icon"/>
-                    <p:commandButton value="#{msg.login_header}" action="#{login.login()}" styleClass="primary" update="loginform"/>
-                    <p:commandButton value="#{msg.register}" onclick="PF('regDialog').show();"/>
+                    <p:commandButton id="loginButton" value="Login" action="#{login.login()}"
+                                     styleClass="primary" />
+                    <p:commandButton value="#{msg.register}" styleClass="other" onclick="PF('regDialog').show();
+                            return false;"/>
                 </p:panelGrid>
             </h:form>
 
-
-            <p:dialog   modal="true" widgetVar="regDialog" styleClass="registerDialog" header="#{msg.register_header}" resizable="false">
-                <h:form id="registerDialog">
-                    <p:messages id="errorsDialog"/>
+            <p:dialog id="regDialog"  modal="true" widgetVar="regDialog" styleClass="registerDialog" header="#{msg.register_header}" resizable="false">
+                <h:form id="registerDialog" prependId="false">
                     <comp:registerData id="registerData" member="#{register.member}"/>
                     <p:commandButton value="#{msg.register}" action="#{register.register()}"  
-                                     type="submit" styleClass="primary"
-                                     update="@this" onsuccess="PF('regDialog').hide();"/>
-                    <p:commandButton value="Close" onclick="PF('regDialog').hide();"/>
-
+                                     type="submit" styleClass="layerOneYes"
+                                     update=":registerDialog :loginform:loginGrowl" oncomplete="if (args &amp;&amp; !args.validationFailed) {PF('regDialog').hide();}" >
+                        <p:resetInput target=":registerDialog" />
+                    </p:commandButton>
+                    <p:commandButton value="#{msg.cancel}" styleClass="layerOneNo" onclick="PF('regDialog').hide();
+                            return false;" />
                 </h:form>
             </p:dialog>
         </h:body>
