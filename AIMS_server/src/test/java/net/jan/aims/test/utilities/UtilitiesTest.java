@@ -5,7 +5,7 @@
  */
 package net.jan.aims.test.utilities;
 
-import net.jan.aims_server.utilities.Utilities;
+import net.jan.aims.aimsserver.utilities.Utilities;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -15,14 +15,11 @@ import static org.junit.Assert.*;
  */
 public class UtilitiesTest {
 
-    public UtilitiesTest() {
-    }
-
     @Test
     public void testByteArrayExtractor() {
         String s = getClass().getClassLoader().getResource("images/ranks/Admiral.png").getFile();
-        assertNotNull(s);
-        assertNotNull(Utilities.getBytesOfFile(s));
+        assertNotNull("String may not be null.",s);
+        assertNotNull("Bytes may not be null.",Utilities.getBytesOfFile(s));
         
     }
 }

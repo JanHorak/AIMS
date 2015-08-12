@@ -9,8 +9,12 @@ and open the template in the editor.
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
+    <head>
+        <script type="text/javascript"  src="http://code.jquery.com/jquery-2.1.4.min.js"/>
+    </head>
     <body>
         <ui:param name="loginBean" value="#{login}" />
+
         <div id="header">
             <ui:insert name="header" >
                 <ui:include src="header.xhtml" />

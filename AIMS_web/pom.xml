@@ -4,7 +4,7 @@
 
     <groupId>net.jan.aims</groupId>
     <artifactId>AIMS_web</artifactId>
-    <version>1.0</version>
+    <version>0.0.2</version>
     <packaging>war</packaging>
 
     <name>AIMS_web</name>
@@ -14,9 +14,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-        
- 
-    
     <dependencies>
         <dependency>
             <groupId>org.primefaces.themes</groupId>
@@ -31,7 +28,14 @@
         <dependency>
             <groupId>net.jan.aims</groupId>
             <artifactId>AIMS_server</artifactId>
-            <version>1.0</version>
+            <version>0.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
@@ -69,6 +73,23 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <archiveClasses>false</archiveClasses>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.5</version>
+                <configuration>
+                    <rulesets>
+                        <ruleset>/src/main/resources/pmd/pmd_rules.xml</ruleset>
+                    </rulesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -5,16 +5,17 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:dialog="http://xmlns.jcp.org/jsf/composite/comp/dialogs"
       xmlns:includes="http://xmlns.jcp.org/jsf/composite/includes">
     <h:body>
 
         <ui:composition template="/content/aims/index.xhtml">
             <ui:define name="content">
                 <h:form id="managementform">
+                    <p:growl id="managementGrowl" showDetail="true" sticky="false"/>
+                    <p:remoteCommand name="refreshTable" update="mainPanel"/>
                     <h1>USERMANAGEMENT</h1>
                     Here you can confirm incoming applications and manage the current members.
-                    <p:accordionPanel>
+                    <p:accordionPanel id="mainPanel">
                         <p:tab title="#{msg.regMembers} , (#{management.countOfNonApplicants})">
                             <p:dataTable value="#{management.nonApplicantMembers}" var="member">
                                 <p:column headerText="Avatar">
@@ -60,38 +61,82 @@
                                 </p:column>
                                 <p:column headerText="#{msg.options}">
                                     <p:row>
-                                        <p:commandButton value="#{msg.confirm}" update=":confirmDialog" oncomplete="PF('d1').show();">
+                                        <p:commandButton value="#{msg.confirm_lb}" update=":confirmDialog" oncomplete="PF('confirmDialog').show();" styleClass="layerOneYes">
                                             <f:setPropertyActionListener value="#{appMember}" target="#{management.selectedMember}"/>
                                         </p:commandButton>
-                                        <p:commandButton value="#{msg.reject}" />
+                                        <p:commandButton value="#{msg.reject}" onclick="PF('rejectConfirmDialog').show();" styleClass="layerOneNo"> 
+                                            <f:setPropertyActionListener value="#{appMember}" target="#{management.selectedMember}"/>
+                                        </p:commandButton>
                                     </p:row>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
                     </p:accordionPanel>
+
+                    <p:confirmDialog header="#{msg.confirmation}" message="#{msg.rejctMessage}" 
+                                     widgetVar="rejectConfirmDialog" 
+                                     global="true" 
+                                     showEffect="fade" 
+                                     hideEffect="fade" 
+                                     appendTo="@(body)">
+
+                        <p:commandButton value="Yes"
+                                         styleClass="primary" 
+                                         onsuccess="refreshTable(); PF('rejectConfirmDialog').hide(); return false;" 
+                                         update=":managementform:managementGrowl"
+                                         icon="ui-icon-check" 
+                                         action="#{management.rejectUser}"
+                                         process="@this"/>
+                        <p:commandButton value="No" styleClass="cancel" icon="ui-icon-close"
+                                         onclick="PF('rejectConfirmDialog').hide();"/>
+                    </p:confirmDialog>
                 </h:form>
 
                 <p:dialog
                     id="confirmDialog"
-                    widgetVar="d1" 
-                    header="asd" 
-                    width="600"
-                    height="500"
+                    widgetVar="confirmDialog" 
+                    header="#{msg.confirm_lb}" 
+                    width="500"
+                    height="350"
                     modal="true" 
                     resizable="false" 
                     closable="true" 
                     draggable="false"
-                    dynamic="true">
+                    dynamic="true">          
                     <h:form>
+                        <p:growl id="comfirmGrowl" showDetail="true" sticky="false"/>
                         <p:outputLabel value="User wants to be added to the system" />
                         <includes:memberData member="#{management.selectedMember}" allFieldsReadOnly="true"/>
+
+                        <p:panelGrid columns="3">
+                            <p:outputLabel for="rank" value="Rank:"/>
+                            <p:selectOneMenu id="rank" value="#{management.selectedRank}" required="true" styleClass="confirmDialogRank">
+                                <f:selectItem itemLabel="Select a Rank" itemValue="" />
+                                <f:selectItems value="#{management.ranks}"/>
+                            </p:selectOneMenu>
+                            <h:message for="rank"/>
+
+                            <p:outputLabel for="posting" value="Posting:"/>
+                            <p:selectOneMenu id="posting" value="#{management.selectedPosting}" required="true" styleClass="confirmDialogRank">
+                                <f:selectItem itemLabel="Select a Posting" itemValue="" />
+                                <f:selectItems value="#{management.postings}"/>
+                            </p:selectOneMenu>
+                            <h:message for="posting"/>
+
+
+                            <p:commandButton value="#{msg.confirm_lb}" action="#{management.confirmUser}"
+                                             onsuccess="PF('confirmDialog').hide(); refreshTable();"
+                                             update="comfirmGrowl" styleClass="layerOneYes"/>
+                            <p:commandButton value="#{msg.cancel}" onclick="PF('confirmDialog').hide(); return false;" styleClass="layerOneNo"/>
+                        </p:panelGrid>
                         <f:facet name="footer">
                             <h:panelGroup layout="block" styleClass="dialogFooter">
-
                             </h:panelGroup>
                         </f:facet>
                     </h:form>
                 </p:dialog>
+
+
 
             </ui:define>
         </ui:composition>

@@ -33,13 +33,13 @@
                          required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
             <p:message for="d_email" display="icon"/>
 
-            <p:outputLabel for="d_pw" value="#{msg.password}"/>
-            <p:password id="d_pw" value="#{cc.attrs.member.password}" 
-                        validator="#{registerValidator.passwordValidator}" 
-                        required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
-            <p:message for="d_pw" display="icon"/>
-            
-            
+            <p:outputLabel for="gender" value="#{msg.gender}"/>
+            <p:inputText id="gender" value="#{cc.attrs.member.gender}" 
+                         validator="#{registerValidator.nameValidator}" 
+                         required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
+            <p:message for="gender" display="icon"/>
+
+
         </p:panelGrid>
     </cc:implementation>
 </html>
