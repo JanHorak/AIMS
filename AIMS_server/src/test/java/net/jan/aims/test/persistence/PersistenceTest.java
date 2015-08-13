@@ -5,6 +5,8 @@
  */
 package net.jan.aims.test.persistence;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -58,16 +60,27 @@ public class PersistenceTest {
 
     @Test
     public void shouldDeleteTestUserByMail() {
+        List<AIMSMember> applicantsBefore = new ArrayList<>();
+        List<AIMSMember> applicantsAfter = new ArrayList<>();
         usermanager = new UserManager();
         em.getTransaction().begin();
+        
         usermanager.setEntityManager(em);
-        AIMSMember s = usermanager.getAllApplicants().get(0);
+        applicantsBefore = usermanager.getAllApplicants();
+        AIMSMember s = applicantsBefore.get(0);
         usermanager.rejectUser(s);
+        
         em.getTransaction().commit();
+        
         em.getTransaction().begin();
         usermanager.deleteUserByMail(s);
         em.getTransaction().commit();
+        
+        applicantsAfter = usermanager.getAllApplicants();
         em.close();
+        
+        assertThat("User is still there.",applicantsAfter.size(), is(applicantsAfter.size()-1));
+        
     }
 
     @Test
@@ -96,7 +109,7 @@ public class PersistenceTest {
         em = emf.createEntityManager();
         usermanager.setEntityManager(em);
         em.getTransaction().begin();
-        clark = null;
+        clark = new AIMSMember();
         clark = (AIMSMember) em.createNamedQuery("AIMSMEMBER_findByMail").setParameter("mail", "clark@aims.de").getSingleResult();
         Assert.assertThat(clark.getForename(), is("changed"));
         clark.setForename("Clark");

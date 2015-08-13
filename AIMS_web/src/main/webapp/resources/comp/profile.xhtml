@@ -11,14 +11,30 @@
             <ui:define name="content">
                 <h:form>
                     <h1>Profile</h1>
-                    <p:fieldset legend="Personal Data">
-                        <includes:memberData member="#{profile.member}"/>
-                    </p:fieldset>
-                    <p:fieldset legend="Avatar">
-                        <p:graphicImage value="#{imageHelper.getImageById(profile.member)}" style="height: 128px; width: 128px;" alt="Error">
-                            <f:param id="memberid" name="member_id" value="#{profile.member.id}" />
-                        </p:graphicImage>
-                    </p:fieldset>
+                    <p:panelGrid columns="2">
+                        <p:column rowspan="2">
+                            <p:fieldset legend="Avatar">
+                                <p:graphicImage value="#{imageHelper.getImageById(profile.member)}" style="height: 128px; width: 128px;" alt="Error">
+                                    <f:param id="memberid" name="member_id" value="#{profile.member.id}" />
+                                </p:graphicImage>
+                            </p:fieldset>
+                            <p:fieldset legend="Personal Data">
+                                <includes:memberData member="#{profile.member}" allFieldsRequired="false"/>
+                            </p:fieldset>
+                        </p:column>
+                        <p:fieldset legend="Abilities">
+                            <includes:abilities member="#{profile.member}" readonly="true"/>
+                        </p:fieldset>
+                        <p:fieldset legend="Lookbook-Test">
+                            <p:panel header="Lookbook- content"/>
+                        </p:fieldset>
+                        <p:fieldset legend="Talents-Test">
+                            <p:panel header="Talents- content"/>
+                        </p:fieldset>
+                        <p:fieldset legend="Skills-Test">
+                            <p:panel header="Skills- content"/>
+                        </p:fieldset>
+                    </p:panelGrid>
                 </h:form>
             </ui:define>
         </ui:composition>

@@ -11,7 +11,7 @@
         <ui:composition template="/content/aims/index.xhtml">
             <ui:define name="content">
                 <h:form id="managementform">
-                    <p:growl id="managementGrowl" showDetail="true" sticky="false"/>
+                    <p:growl id="managementGrowl" showDetail="false" sticky="false"/>
                     <p:remoteCommand name="refreshTable" update="mainPanel"/>
                     <h1>USERMANAGEMENT</h1>
                     Here you can confirm incoming applications and manage the current members.
@@ -35,14 +35,32 @@
                                         #{member.rank}
                                     </p:row>
                                 </p:column>
+                                <p:column headerText="#{msg.currentPosting}">
+                                    <p:row>
+                                        #{member.post.formattedString}
+                                    </p:row>
+                                </p:column>
+                                <p:column headerText="#{msg.currentSecurityLevel}">
+                                    <p:row>
+                                        #{member.securityLevel}
+                                    </p:row>
+                                </p:column>
                                 <p:column headerText="#{msg.admin}">
                                     <p:row>
                                         #{member.hasAdminrights() ? 'Yes' : 'No'}
                                     </p:row>
                                 </p:column>
-                                <p:column headerText="#{msg.options}">
+                                <p:column headerText="#{msg.options}" colspan="2">
                                     <p:row>
-                                        <p:link value="Edit" />
+                                        <p:outputLabel value="#{msg.optionsMissingMessage}" style="font-size: small"/>
+                                    </p:row>
+                                    <p:row>
+                                        <p:commandButton value="Edit abilities" update=":editAbilitiesDialog" 
+                                                         oncomplete="PF('editAbilitiesDialog').show();" 
+                                                         styleClass="layerOneYes"
+                                                         rendered="#{menubean.member.post == 'RSKB'}">
+                                            <f:setPropertyActionListener value="#{member}" target="#{management.selectedMember}"/>
+                                        </p:commandButton>
                                     </p:row>
                                 </p:column>
                             </p:dataTable>
@@ -93,6 +111,35 @@
                 </h:form>
 
                 <p:dialog
+                    id="editAbilitiesDialog"
+                    widgetVar="editAbilitiesDialog" 
+                    header="#{msg.editAbilities_lb}" 
+                    width="500"
+                    height="550"
+                    modal="true" 
+                    resizable="false" 
+                    closable="true" 
+                    draggable="false"
+                    dynamic="true">          
+                    <h:form id="editAbilitiesForm">
+                        <p:growl id="editAbilitiesGrowl" showDetail="true" sticky="false"/>
+                        <p:outputLabel value="#{msg.abilitychange}" />
+                        <includes:abilities member="#{management.selectedMember}" readonly="false"/>
+
+                        <p:panelGrid columns="4">
+                            <p:commandButton value="#{msg.confirm_lb}" action="#{management.updateSelectedUser()}"
+                                             oncomplete="if (args &amp;&amp; !args.validationFailed) {PF('editAbilitiesDialog').hide(); refreshTable();}"
+                                             update="editAbilitiesForm editAbilitiesGrowl" styleClass="layerOneYes"/>
+                            <p:commandButton value="#{msg.cancel}" onclick="PF('editAbilitiesDialog').hide();
+                                    return false;" styleClass="layerOneNo" update="editAbilitiesForm">
+                                <p:resetInput target=":editAbilitiesDialog" />
+                            </p:commandButton>
+                            <p:selectBooleanCheckbox itemLabel="#{msg.notifyUserAboutUpdate}" value="#{management.notifyUserAboutChange}" style="font-size: small"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog
                     id="confirmDialog"
                     widgetVar="confirmDialog" 
                     header="#{msg.confirm_lb}" 
@@ -103,9 +150,9 @@
                     closable="true" 
                     draggable="false"
                     dynamic="true">          
-                    <h:form>
-                        <p:growl id="comfirmGrowl" showDetail="true" sticky="false"/>
-                        <p:outputLabel value="User wants to be added to the system" />
+                    <h:form id="confirmForm">
+                        <p:growl id="comfirmGrowl" showDetail="false" sticky="false"/>
+                        <p:outputLabel value="#{msg.confirmDialogHeader}" />
                         <includes:memberData member="#{management.selectedMember}" allFieldsReadOnly="true"/>
 
                         <p:panelGrid columns="3">
@@ -125,9 +172,10 @@
 
 
                             <p:commandButton value="#{msg.confirm_lb}" action="#{management.confirmUser}"
-                                             onsuccess="PF('confirmDialog').hide(); refreshTable();"
-                                             update="comfirmGrowl" styleClass="layerOneYes"/>
-                            <p:commandButton value="#{msg.cancel}" onclick="PF('confirmDialog').hide(); return false;" styleClass="layerOneNo"/>
+                                             oncomplete="if (args &amp;&amp; !args.validationFailed) {PF('confirmDialog').hide(); refreshTable();}"
+                                             update="confirmForm comfirmGrowl" styleClass="layerOneYes"/>
+                            <p:commandButton value="#{msg.cancel}" onclick="PF('confirmDialog').hide();
+                                    return false;" styleClass="layerOneNo"/>
                         </p:panelGrid>
                         <f:facet name="footer">
                             <h:panelGroup layout="block" styleClass="dialogFooter">

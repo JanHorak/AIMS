@@ -5,7 +5,9 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp">
+      xmlns:comp="http://xmlns.jcp.org/jsf/composite/comp"
+      xmlns:dialogs="http://xmlns.jcp.org/jsf/composite/dialogs"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <f:view contentType="text/html">
         <h:head>
@@ -29,7 +31,7 @@
                     </f:facet>
 
                     <p:outputLabel for="email" value="#{msg.emailaddress}"/>
-                    <p:inputText id="email" value="11111111" widgetVar="email"
+                    <p:inputText id="email" value="#{login.member.email}" widgetVar="email"
                                  required="true" validator="#{generalValidator.mailValidator}"/>
                     <p:message for="email" display="icon"/>
                     <p:outputLabel for="pw" value="#{msg.password}"/>
@@ -56,5 +58,5 @@
             </p:dialog>
         </h:body>
     </f:view>
-
+    
 </html>

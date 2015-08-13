@@ -81,7 +81,7 @@ public class LoginBean implements Serializable {
         } catch (ServletException ex) {
             LOGGER.error("Logout failed: {}", ex.toString());
         }
-        return null;
+        return navigationBean.toLogin();
     }
 
 }
