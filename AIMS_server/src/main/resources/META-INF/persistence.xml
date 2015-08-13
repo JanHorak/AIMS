@@ -5,6 +5,8 @@
     <jta-data-source>java:/jdbc/aimsDS</jta-data-source>
     <class>net.jan.aims.aimsserver.entities.Rank</class>
     <class>net.jan.aims.aimsserver.entities.AIMSMember</class>
+    <class>net.jan.aims.aimsserver.entities.Skill</class>
+    <class>net.jan.aims.aimsserver.entities.Talent</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
       <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/aims"/>

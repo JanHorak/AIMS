@@ -9,37 +9,36 @@
     <cc:interface>
         <cc:attribute name="member" required="true"/>
         <cc:attribute name="allFieldsReadOnly" required="false" default="true"/>
+        <cc:attribute name="allFieldsRequired" required="false" default="true"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <p:messages id="errorsDialog"/>
         <p:panelGrid columns="3" >
-            <p:outputLabel for="d_name" value="#{msg.lastname}"/>
-            <p:inputText id="d_name" value="#{cc.attrs.member.lastname}"
+            <p:outputLabel for="name" value="#{msg.lastname}"/>
+            <p:inputText id="name" value="#{cc.attrs.member.lastname}"
                          validator="#{registerValidator.nameValidator}" 
-                         required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
-            <p:message for="d_name" display="icon"/>
+                         required="#{cc.attrs.allFieldsRequired}" readonly="#{cc.attrs.allFieldsReadOnly}"/>
+            <p:message for="name" display="icon"/>
 
-            <p:outputLabel for="d_forename" value="#{msg.forename}"/>
-            <p:inputText id="d_forename" value="#{cc.attrs.member.forename}" 
+            <p:outputLabel for="forename" value="#{msg.forename}"/>
+            <p:inputText id="forename" value="#{cc.attrs.member.forename}" 
                          validator="#{registerValidator.nameValidator}" 
-                         required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
-            <p:message for="d_forename" display="icon"/>
+                         required="#{cc.attrs.allFieldsRequired}" readonly="#{cc.attrs.allFieldsReadOnly}"/>
+            <p:message for="forename" display="icon"/>
 
-            <p:outputLabel for="d_email" value="#{msg.emailaddress}"/>
-            <p:inputText id="d_email" value="#{cc.attrs.member.email}" 
+            <p:outputLabel for="email" value="#{msg.emailaddress}"/>
+            <p:inputText id="email" value="#{cc.attrs.member.email}" 
                          validator="#{registerValidator.mailValidator}" 
-                         required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
-            <p:message for="d_email" display="icon"/>
+                         required="#{cc.attrs.allFieldsRequired}" readonly="#{cc.attrs.allFieldsReadOnly}"/>
+            <p:message for="email" display="icon"/>
 
             <p:outputLabel for="gender" value="#{msg.gender}"/>
             <p:inputText id="gender" value="#{cc.attrs.member.gender}" 
                          validator="#{registerValidator.nameValidator}" 
-                         required="true" readonly="#{cc.attrs.allFieldsReadOnly}"/>
+                         required="#{cc.attrs.allFieldsRequired}" readonly="#{cc.attrs.allFieldsReadOnly}"/>
             <p:message for="gender" display="icon"/>
-
-
         </p:panelGrid>
     </cc:implementation>
 </html>

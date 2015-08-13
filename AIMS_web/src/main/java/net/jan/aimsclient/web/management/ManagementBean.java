@@ -28,7 +28,7 @@ import net.jan.aimsclient.web.notification.NotificationHandler;
 @ViewScoped
 @ManagedBean(name = "management")
 public class ManagementBean implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     @EJB
@@ -46,12 +46,14 @@ public class ManagementBean implements Serializable {
     private List<AIMSMember> applicantMembers = new ArrayList<>();
     private List<AIMSMember> nonApplicantMembers = new ArrayList<>();
 
+    private boolean notifyUserAboutChange;
+
     @PostConstruct
     public void init() {
-        updateTable();
+        updateAndResetTable();
     }
 
-    private void updateTable() {
+    private void updateAndResetTable() {
         applicantMembers = new ArrayList<>();
         nonApplicantMembers = new ArrayList<>();
         selectedMember = new AIMSMember();
@@ -72,27 +74,38 @@ public class ManagementBean implements Serializable {
         for (EnumPost p : EnumPost.values()) {
             postings.put(p.getFormattedString(), p);
         }
+        this.notifyUserAboutChange = true;
     }
-    
-    public String rejectUser(){
+
+    public String rejectUser() {
         dataAccess.rejectUser(selectedMember);
         dataAccess.deleteUserByMail(selectedMember);
-        NotificationHandler.fireNotification("User rejected.", "User " 
-                + selectedMember.getForename()+ " " 
-                + selectedMember.getLastname() + " is rejected." );
-        updateTable();
+        NotificationHandler.fireNotification("User rejected.", "User "
+                + selectedMember.getForename() + " "
+                + selectedMember.getLastname() + " is rejected.");
+        updateAndResetTable();
+        return null;
+    }
+
+    public String updateSelectedUser() {
+        dataAccess.updateUser(selectedMember);
+        NotificationHandler.fireNotification("User updated.", "User "
+                + selectedMember.getForename() + " "
+                + selectedMember.getLastname() + " is updated. "
+                + this.notifyUserAboutChange);
+        updateAndResetTable();
         return null;
     }
 
     public String confirmUser() {
-        NotificationHandler.fireNotification("User confirmed.", "User " 
-                + selectedMember.getForename()+ " " 
-                + selectedMember.getLastname() + " is joined to the current members." );
         selectedMember.setApplicant(false);
         selectedMember.setRank(EnumRank.valueOf(selectedRank));
         selectedMember.setPost(EnumPost.valueOf(selectedPosting));
         dataAccess.updateUser(selectedMember);
-        updateTable();
+        NotificationHandler.fireNotification("User confirmed.", "User "
+                + selectedMember.getForename() + " "
+                + selectedMember.getLastname() + " is joined to the current members.");
+        updateAndResetTable();
         return null;
     }
 
@@ -171,6 +184,14 @@ public class ManagementBean implements Serializable {
 
     public void setSelectedPosting(String selectedPosting) {
         this.selectedPosting = selectedPosting;
+    }
+
+    public boolean isNotifyUserAboutChange() {
+        return notifyUserAboutChange;
+    }
+
+    public void setNotifyUserAboutChange(boolean notifyUserAboutChange) {
+        this.notifyUserAboutChange = notifyUserAboutChange;
     }
 
 }

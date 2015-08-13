@@ -26,6 +26,10 @@ public class NavigationBean implements Serializable {
     public String accessAllowed() {
         return "/content/aims/index.xhtml";
     }
+    
+    public String toLogin(){
+        return "logout";
+    }
 
     public String toMemberManagement() {
         return "management";

@@ -6,6 +6,7 @@
 package net.jan.aims.aimsserver.entities;
 
 import java.io.Serializable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,6 +14,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import net.jan.aims.aimsserver.enums.EnumPost;
 import net.jan.aims.aimsserver.enums.EnumRank;
+import net.jan.aims.aimsserver.enums.SecurityLevel;
 
 /**
  *
@@ -27,11 +29,36 @@ import net.jan.aims.aimsserver.enums.EnumRank;
     @NamedQuery(name = "AIMSMEMBER_findALLApplicants", query = "SELECT m FROM AIMSMember m WHERE m.applicant = TRUE")
 })
 public class AIMSMember extends BasicMember implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     @Enumerated(EnumType.STRING)
+    private EnumPost post;
+
+    @Enumerated(EnumType.STRING)
     private EnumRank rank;
+
+    @Enumerated(EnumType.STRING)
+    private SecurityLevel securityLevel;
+
+    @Embedded
+    private Abilities abilities;
+
+    public SecurityLevel getSecurityLevel() {
+        return securityLevel;
+    }
+
+    public void setSecurityLevel(SecurityLevel securityLevel) {
+        this.securityLevel = securityLevel;
+    }
+
+    public Abilities getAbilities() {
+        return abilities;
+    }
+
+    public void setAbilities(Abilities abilities) {
+        this.abilities = abilities;
+    }
 
     public EnumRank getRank() {
         return rank;
@@ -40,9 +67,6 @@ public class AIMSMember extends BasicMember implements Serializable {
     public void setRank(EnumRank rank) {
         this.rank = rank;
     }
-
-    @Enumerated(EnumType.STRING)
-    private EnumPost post;
 
     public EnumPost getPost() {
         return post;

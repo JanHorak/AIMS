@@ -43,7 +43,7 @@
             <p:outputLabel for="d_pw" value="#{msg.password}"/>
             <p:password id="d_pw" value="#{cc.attrs.member.password}" widgetVar="d_pw"
                         validator="#{generalValidator.passwordValidator}" 
-                        required="true" onkeydown="AIMS.processPasswordSecurity()">
+                        required="true" onkeydown="AIMS.processPasswordSecurity()" onkeyup="pwComparison();">
             </p:password>
             <p:message for="d_pw" display="icon"/>
 

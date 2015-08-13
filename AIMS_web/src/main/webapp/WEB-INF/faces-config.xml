@@ -29,5 +29,21 @@
             <redirect/>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/content/aims/*</from-view-id>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>login.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/resources/comp/*</from-view-id>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>login.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
     
 </faces-config>

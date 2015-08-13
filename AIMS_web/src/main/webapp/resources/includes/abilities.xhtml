@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="member" required="true"/>
+        <cc:attribute name="readonly" required="true" default="true"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:panelGrid columns="2" >
+            <p:outputLabel for="leben" value="#{msg.lebenspunkte}"/>
+            <p:inputText id="leben" value="#{cc.attrs.member.abilities.lebenspunkte}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+
+            <p:outputLabel for="mut" value="#{msg.mut}"/>
+            <p:inputText id="mut" value="#{cc.attrs.member.abilities.mut}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+
+            <p:outputLabel for="intelligenz" value="#{msg.intelligenz}"/>
+            <p:inputText id="intelligenz" value="#{cc.attrs.member.abilities.intelligenz}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+
+            <p:outputLabel for="geschicklichkeit" value="#{msg.geschicklichkeit}"/>
+            <p:inputText id="geschicklichkeit" value="#{cc.attrs.member.abilities.geschicklichkeit}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+
+            <p:outputLabel for="wissen" value="#{msg.wissen}"/>
+            <p:inputText id="wissen" value="#{cc.attrs.member.abilities.wissen}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+
+            <p:outputLabel for="konstitution" value="#{msg.konstitution}"/>
+            <p:inputText id="konstitution" value="#{cc.attrs.member.abilities.konstitution}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+
+            <p:outputLabel for="charisma" value="#{msg.charisma}"/>
+            <p:inputText id="charisma" value="#{cc.attrs.member.abilities.charisma}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+
+            <p:outputLabel for="koerperbeherrschung" value="#{msg.koerperbeherrschung}"/>
+            <p:inputText id="koerperbeherrschung" value="#{cc.attrs.member.abilities.koerperbeherrschung}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+
+            <p:outputLabel for="kreativitaet" value="#{msg.kreativitaet}"/>
+            <p:inputText id="kreativitaet" value="#{cc.attrs.member.abilities.kreativitaet}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+
+            <p:outputLabel for="telepathie" value="#{msg.telepathie}"/>
+            <p:inputText id="telepathie" value="#{cc.attrs.member.abilities.telepathie}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+
+            <p:outputLabel for="impulsivitaet" value="#{msg.impulsivitaet}"/>
+            <p:inputText id="impulsivitaet" value="#{cc.attrs.member.abilities.impulsivitaet}" readonly="#{cc.attrs.readonly}"
+                         validator="#{generalValidator.numberValidator}"/>
+        </p:panelGrid>
+    </cc:implementation>
+</html>

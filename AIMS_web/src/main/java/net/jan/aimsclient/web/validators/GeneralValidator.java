@@ -11,6 +11,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -19,7 +21,9 @@ import javax.inject.Named;
 @Named(value = "generalValidator")
 @RequestScoped
 public class GeneralValidator {
- 
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GeneralValidator.class);
+
     public void passwordValidator(FacesContext context, UIComponent component, Object value)
             throws ValidatorException {
         String msg = "";
@@ -44,5 +48,21 @@ public class GeneralValidator {
 
     }
 
-    
+    public void numberValidator(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException {
+        String msg = "";
+        boolean throwError = false;
+        try {
+            Integer.parseInt(value.toString());
+        } catch (NumberFormatException ex) {
+            LOGGER.error(ex.toString());
+            throwError = true;
+        }
+        if (throwError) {
+            msg = "Input must be a number";
+            FacesMessage message = new FacesMessage(msg);
+            throw new ValidatorException(message);
+        }
+    }
+
 }
