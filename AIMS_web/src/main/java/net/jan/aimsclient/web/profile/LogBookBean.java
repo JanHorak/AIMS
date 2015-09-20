@@ -23,7 +23,7 @@ import net.jan.aims.aimsserver.entities.LogBook;
 import net.jan.aims.aimsserver.entities.LogBookEntry;
 import net.jan.aims.aimsserver.enums.EnumPost;
 import net.jan.aims.aimsserver.enums.SecurityLevel;
-import net.jan.aims.aimsserver.persistence.AIMS_LogBookManagement;
+import net.jan.aims.aimsserver.persistence.LogBookManager;
 import net.jan.aimsclient.web.notification.NotificationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class LogBookBean implements Serializable {
     private AIMSMember currentUser;
 
     @EJB
-    private AIMS_LogBookManagement logBookManagement;
+    private LogBookManager logBookManagement;
 
     private List<LogBook> logBooks;
 

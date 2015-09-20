@@ -18,7 +18,7 @@ import javax.faces.bean.RequestScoped;
 import net.jan.aims.aimsserver.entities.AIMSMember;
 import net.jan.aims.aimsserver.entities.BasicMember;
 import net.jan.aims.aimsserver.enums.EnumGender;
-import net.jan.aims.aimsserver.persistence.AIMS_UserManagement;
+import net.jan.aims.aimsserver.persistence.UserManager;
 import net.jan.aimsclient.web.notification.NotificationHandler;
 import org.apache.commons.io.IOUtils;
 
@@ -29,14 +29,14 @@ import org.apache.commons.io.IOUtils;
 @ManagedBean(name = "register")
 @RequestScoped
 public class RegisterBean implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private AIMS_UserManagement usermanager;
+    private UserManager usermanager;
 
     private BasicMember member;
-    
+
     private Map<String, EnumGender> gender;
     private String selectedGender;
 
@@ -44,7 +44,7 @@ public class RegisterBean implements Serializable {
     public void init() {
         member = new AIMSMember();
         gender = new HashMap<>();
-        for (EnumGender g : EnumGender.values()){
+        for (EnumGender g : EnumGender.values()) {
             gender.put(g.name(), g);
         }
     }
@@ -89,5 +89,5 @@ public class RegisterBean implements Serializable {
     public void setSelectedGender(String selectedGender) {
         this.selectedGender = selectedGender;
     }
-    
+
 }

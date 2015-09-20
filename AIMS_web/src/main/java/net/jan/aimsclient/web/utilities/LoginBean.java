@@ -6,7 +6,6 @@
 package net.jan.aimsclient.web.utilities;
 
 import java.io.Serializable;
-import java.security.Principal;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -18,7 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import net.jan.aims.aimsserver.entities.AIMSMember;
 import javax.inject.Named;
-import net.jan.aims.aimsserver.persistence.AIMS_UserManagement;
+import net.jan.aims.aimsserver.persistence.UserManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,7 @@ public class LoginBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private AIMS_UserManagement userManager;
+    private UserManager userManager;
 
     @Inject
     private NavigationBean navigationBean;

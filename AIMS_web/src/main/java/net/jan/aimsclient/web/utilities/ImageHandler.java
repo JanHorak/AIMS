@@ -42,7 +42,7 @@ public class ImageHandler implements Serializable {
         } else {
             String param = fc.getExternalContext().getRequestParameterMap().get("member_id");
             if (!param.isEmpty()){
-                return new DefaultStreamedContent(new ByteArrayInputStream(managementBean.getMemberById(param).getAvatar()), "image/png");
+                return new DefaultStreamedContent(new ByteArrayInputStream(managementBean.getMemberById(param).get().getAvatar()), "image/png");
             } else {
                 return new DefaultStreamedContent(new ByteArrayInputStream(m.getAvatar()), "image/png");
             }

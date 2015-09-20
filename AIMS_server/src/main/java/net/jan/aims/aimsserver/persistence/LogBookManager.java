@@ -21,34 +21,30 @@ import net.jan.aims.aimsserver.entities.LogBookEntry;
  */
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-public class LogBookManager implements AIMS_LogBookManagement {
+public class LogBookManager {
 
     @PersistenceContext(unitName = "aimsDS")
     private EntityManager em;
 
-    @Override
+
     public void saveNewEntry(LogBook book, LogBookEntry entry) {
         LogBook old = em.find(LogBook.class, book.getId());
         entry.setOwner(old);
         em.persist(entry);
     }
 
-    @Override
     public List<LogBook> getLogBooksByUserId(Long id) {
         return (List<LogBook>) em.createNamedQuery("LOGBOOK.findAllByUserID").setParameter("id", id).getResultList();
     }
 
-    @Override
     public LogBook getLogBookById(Long id) {
         return (LogBook) em.createNamedQuery("LOGBOOK.findByID").setParameter("id", id).getSingleResult();
     }
 
-    @Override
     public List<LogBookEntry> getEntriesByOwnerId(Long id) {
         return (List<LogBookEntry>) em.createNamedQuery("LOGBOOKENTRY.findByOwnerID").setParameter("id", id).getResultList();
     }
 
-    @Override
     public void saveNewLogBook(LogBook logBook) {
         AIMSMember member = em.find(AIMSMember.class, logBook.getOwner().getId());
         logBook.setOwner(member);

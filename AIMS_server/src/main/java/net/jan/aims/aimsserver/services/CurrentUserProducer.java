@@ -9,12 +9,11 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import net.jan.aims.aimsserver.annotations.CurrentUser;
 import net.jan.aims.aimsserver.entities.AIMSMember;
-import net.jan.aims.aimsserver.persistence.AIMS_UserManagement;
+import net.jan.aims.aimsserver.persistence.UserManager;
 
 /**
  *
@@ -27,7 +26,7 @@ public class CurrentUserProducer {
     private SessionContext context;
 
     @EJB
-    private AIMS_UserManagement manager;
+    private UserManager manager;
 
     @Produces
     @CurrentUser
