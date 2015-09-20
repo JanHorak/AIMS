@@ -23,32 +23,27 @@ import net.jan.aims.aimsserver.entities.BasicMember;
  */
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-public class UserManager implements AIMS_UserManagement {
+public class UserManager {
 
     @PersistenceContext(unitName = "aimsDS")
     private EntityManager em;
 
-    @Override
     public BasicMember findUserByMail(String eMail) {
         return (BasicMember) em.createNamedQuery("AIMSMEMBER_findByMail").setParameter("mail", eMail).getSingleResult();
     }
 
-    @Override
     public List<AIMSMember> getAllMembers() {
         return (List<AIMSMember>) em.createNamedQuery("AIMSMEMBER_findALL").getResultList();
     }
 
-    @Override
     public List<AIMSMember> getAllApplicants() {
         return (List<AIMSMember>) em.createNamedQuery("AIMSMEMBER_findALLApplicants").getResultList();
     }
 
-    @Override
     public void saveApplicant(BasicMember member) {
         em.persist(member);
     }
 
-    @Override
     public boolean isUserExisting(BasicMember member) {
         Query q = em.createNamedQuery("AIMSMEMBER_findByMail").setParameter("mail", member.getEmail());
         AIMSMember tmp;
@@ -63,27 +58,21 @@ public class UserManager implements AIMS_UserManagement {
         }
         return isExisting;
     }
-
-    @Override
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }
 
-    @Override
     public void updateUser(AIMSMember newOne) {
-        //AIMSMember user = (AIMSMember) em.createNamedQuery("AIMSMEMBER_findByMail").setParameter("mail", newOne.getEmail()).getSingleResult();
         em.createNamedQuery("AIMSMEMBER_findByMail").setParameter("mail", newOne.getEmail()).getSingleResult();
         em.merge(newOne);
     }
 
-    @Override
     public void rejectUser(AIMSMember applicant) {
         Set<String> groups = applicant.getSystemGroup();
         groups.clear();
         updateUser(applicant);
     }
 
-    @Override
     public void deleteUserByMail(AIMSMember user) {
         em.createNamedQuery("AIMSMEMBER_deleteByMail").setParameter("mail", user.getEmail()).executeUpdate();
     }

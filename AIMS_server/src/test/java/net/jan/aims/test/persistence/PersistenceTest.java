@@ -14,7 +14,6 @@ import net.jan.aims.aimsserver.entities.AIMSMember;
 import net.jan.aims.aimsserver.enums.EnumGender;
 import net.jan.aims.aimsserver.enums.EnumPost;
 import net.jan.aims.aimsserver.enums.EnumRank;
-import net.jan.aims.aimsserver.persistence.AIMS_UserManagement;
 import net.jan.aims.aimsserver.persistence.UserManager;
 import static org.hamcrest.CoreMatchers.is;
 import org.junit.Assert;
@@ -34,7 +33,7 @@ public class PersistenceTest {
 
     private EntityManagerFactory emf;
 
-    AIMS_UserManagement usermanager;
+    private UserManager usermanager;
 
     @Before
     public void init() {
@@ -64,31 +63,31 @@ public class PersistenceTest {
         List<AIMSMember> applicantsAfter = new ArrayList<>();
         usermanager = new UserManager();
         em.getTransaction().begin();
-        
+
         usermanager.setEntityManager(em);
         applicantsBefore = usermanager.getAllApplicants();
         AIMSMember s = applicantsBefore.get(0);
         usermanager.rejectUser(s);
-        
+
         em.getTransaction().commit();
-        
+
         em.getTransaction().begin();
         usermanager.deleteUserByMail(s);
         em.getTransaction().commit();
-        
+
         applicantsAfter = usermanager.getAllApplicants();
         em.close();
-        
-        assertThat("User is still there.", is(applicantsAfter.size() == applicantsBefore.size()-1 || applicantsAfter.isEmpty()));
-        
+
+        assertThat("User is still there.", is(applicantsAfter.size() == applicantsBefore.size() - 1 || applicantsAfter.isEmpty()));
+
     }
 
     @Test
-    public void shouldUpdateTestUsers(){
+    public void shouldUpdateTestUsers() {
         usermanager = new UserManager();
         em.getTransaction().begin();
         usermanager.setEntityManager(em);
-        
+
         AIMSMember clark = new AIMSMember();
         clark.setId(2);
         clark.setAdminrights(true);
@@ -101,11 +100,11 @@ public class PersistenceTest {
         clark.setPost(EnumPost.RSKB);
         clark.setApplicant(false);
         clark.setPassword("jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=");
-        
+
         usermanager.updateUser(clark);
         em.getTransaction().commit();
         em.close();
-        
+
         em = emf.createEntityManager();
         usermanager.setEntityManager(em);
         em.getTransaction().begin();
@@ -118,5 +117,5 @@ public class PersistenceTest {
         em.close();
         assertThat("Name was unexpected", clark.getForename(), is("Clark"));
     }
-    
+
 }

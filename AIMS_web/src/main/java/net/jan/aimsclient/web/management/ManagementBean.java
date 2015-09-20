@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -18,7 +19,7 @@ import javax.faces.bean.ViewScoped;
 import net.jan.aims.aimsserver.entities.AIMSMember;
 import net.jan.aims.aimsserver.enums.EnumPost;
 import net.jan.aims.aimsserver.enums.EnumRank;
-import net.jan.aims.aimsserver.persistence.AIMS_UserManagement;
+import net.jan.aims.aimsserver.persistence.UserManager;
 import net.jan.aimsclient.web.notification.NotificationHandler;
 
 /**
@@ -32,7 +33,7 @@ public class ManagementBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private AIMS_UserManagement dataAccess;
+    private UserManager dataAccess;
 
     private List<AIMSMember> allMembers;
     private AIMSMember selectedMember;
@@ -161,13 +162,8 @@ public class ManagementBean implements Serializable {
         return allMembers;
     }
 
-    public AIMSMember getMemberById(String id) {
-        for (AIMSMember m : allMembers) {
-            if (String.valueOf(m.getId()).equals(id)) {
-                return m;
-            }
-        }
-        return null;
+    public Optional<AIMSMember> getMemberById(String id) {
+        return allMembers.stream().filter(p -> String.valueOf(p.getId()).equals(id)).findAny();
     }
 
     public Map<String, EnumPost> getPostings() {
