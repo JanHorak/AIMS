@@ -7,6 +7,9 @@
     <class>net.jan.aims.aimsserver.entities.AIMSMember</class>
     <class>net.jan.aims.aimsserver.entities.Skill</class>
     <class>net.jan.aims.aimsserver.entities.Talent</class>
+    <class>net.jan.aims.aimsserver.entities.LogBook</class>
+    <class>net.jan.aims.aimsserver.entities.LogBookEntry</class>
+    <class>net.jan.aims.aimsserver.converter.LocalTimeConverter</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
       <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/aims"/>
@@ -20,7 +23,6 @@
   </persistence-unit>
   <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <non-jta-data-source/>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
       <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/aims"/>

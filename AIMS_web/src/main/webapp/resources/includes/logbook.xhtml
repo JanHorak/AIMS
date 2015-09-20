@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface name="logbookP">
+        <cc:attribute name="backingBean" required="true"/>
+        <cc:attribute name="saveEntryAction"  method-signature="java.lang.Void action()" required="true"/>
+        <cc:attribute name="resetAction"  method-signature="java.lang.Void action()" required="true"/>
+        <cc:attribute name="saveLogBookAction"  method-signature="java.lang.Void action()" required="true"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <span id="#{cc.clientId}">
+            <h:form id ="logbookOVForm" >
+                <p:dataTable id="logbookTable" var="logbook" value="#{cc.attrs.backingBean.logBooks}" rowKey="#{logbook.id}"
+                             selection="#{cc.attrs.backingBean.selectedLogBook}" selectionMode="single">
+                    <f:facet name="header">
+                        Logbooks
+                    </f:facet>
+                    <p:column headerText="Title">
+                        <h:outputText value="#{logbook.title}" />
+                    </p:column>
+                    <p:column headerText="Tags">
+                        <h:outputText value="#{logbook.tagList.toString()}" />
+                    </p:column>
+                    <p:column headerText="Security Level">
+                        <h:outputText value="#{logbook.securityLevel.toString()}" />
+                    </p:column>
+                    <p:column headerText="Options">
+                        <p:tooltip for="showLogBook" value="Display Logbook"/>
+                        <p:tooltip for="addEntry" value="Add a new entry"/>
+                        <p:tooltip for="changeSL" value="Change the security level for this Logbook"/>
+                        <p:commandLink id="showLogBook" styleClass="ui-icon ui-icon-search" update=":profileForm:logbook:entryDialog"  oncomplete="PF('entryDialog').show();" 
+                                       rendered="#{profile.member.securityLevel.isHigherThan(logbook.securityLevel)}">
+                            <f:setPropertyActionListener value="#{logbook}" target="#{cc.attrs.backingBean.selectedLogBook}"/>
+                        </p:commandLink>
+                        <p:commandLink id="addEntry" styleClass="ui-icon ui-icon-plus" oncomplete="PF('newentryDialog').show();"
+                                       rendered="#{profile.member.securityLevel.isHigherThan(logbook.securityLevel)}">
+                            <f:setPropertyActionListener value="#{logbook}" target="#{cc.attrs.backingBean.selectedLogBook}"/>
+                        </p:commandLink>
+
+                        <p:commandLink id="changeSL" styleClass="ui-icon ui-icon-locked" oncomplete="PF('entryDialog').show();"
+                                       rendered="#{profile.member.securityLevel.isHigherThan(logbook.securityLevel)}">
+                            <f:setPropertyActionListener value="#{logbook}" target="#{cc.attrs.backingBean.selectedLogBook}"/>
+                        </p:commandLink>
+                        <p:commandButton value="Try to hack" oncomplete="PF('entryDialog').show();" styleClass="layerOneYes" 
+                                         rendered="#{!profile.member.securityLevel.isHigherThan(logbook.securityLevel)}">
+                            <f:setPropertyActionListener value="#{logbook}" target="#{cc.attrs.backingBean.selectedLogBook}"/>
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable> 
+                <p:commandButton value="Add new Logbook" oncomplete="PF('newLogBookDialog').show();" styleClass="layerOneYes"/>
+            </h:form>
+
+
+            <p:dialog id="entryDialog"  
+                      modal="true" 
+                      widgetVar="entryDialog" 
+                      resizable="false" 
+                      closable="true" 
+                      draggable="false"
+                      appendTo="@(body)"
+                      styleClass="displayLogBookEntries" onHide="PF('paginator').getPaginator().setPage(0);"> 
+                <h:form id="entryForm" >
+
+                    <p:dataTable id="paginator" var="entry" value="#{cc.attrs.backingBean.selectedLogBook.entries}" rows="1" 
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="1"
+                                 styleClass="displayLogBookEntriesTable" widgetVar="paginator">
+                        <p:column>
+                            <h:outputText value="#{entry.topic}" style="font-size: large;"/>
+                            <p/>
+                            <h:outputText value="#{entry.subTopic}" style="font-size: medium"/>
+                            <p/>
+                            <h:outputText value="Time: #{entry.timeOfEntry}" />
+                            <p/>
+                            <p:separator />
+                            <h:outputText value="#{entry.content}" escape="false"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:dialog>
+
+            <p:dialog id="newLogBookDialog"  
+                      modal="true" 
+                      widgetVar="newLogBookDialog" 
+                      resizable="false" 
+                      closable="true" 
+                      draggable="false">
+                <h:form id="newLogBookForm">
+                    <p:growl id="newLogbookGrowl" showDetail="true" sticky="false"/>
+                    <p:panelGrid columns="3" id="newLogBookGrid">
+                        <p:column colspan="3">
+                            <p:outputLabel for="titleField" value="Title:"/>
+                            <p:inputText id="titleField" value="#{cc.attrs.backingBean.titleForNewLogbook}" required="true" style="margin: 10px;"/>
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:selectCheckboxMenu id="tags" value="#{cc.attrs.backingBean.selectedTags}" label="Tags"
+                                                  filter="false" filterMatchMode="startsWith" panelStyle="width:250px">
+                                <f:selectItems value="#{cc.attrs.backingBean.tagList}" />
+                            </p:selectCheckboxMenu>
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:outputLabel for="securityLevel" value="Security Level: " />
+                            <p:selectOneMenu id="securityLevel" value="#{cc.attrs.backingBean.selectedSecurityLevel}">
+                                <f:selectItem itemLabel="Select a SL" itemValue="" />
+                                <f:selectItems value="#{cc.attrs.backingBean.securityLevelList}" />
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:panelGrid>
+                    <p:separator />
+                    <p:commandButton id="newLogBookForm" action="#{cc.attrs.saveLogBookAction}" 
+                                     process="newLogBookForm"
+                                     value="Save"
+                                     update="newLogBookForm :profileForm:logbook:logbookOVForm:logbookTable" 
+                                     onsuccess="#{cc.attrs.backingBean.refreshLogBooks()}"
+                                     oncomplete="if (args &amp;&amp; !args.validationFailed) {PF('newLogBookDialog').hide();}" 
+                                     icon="ui-icon-disk" 
+                                     styleClass="layerOneYes"/>
+                    <p:commandButton value="Cancel" action="#{cc.attrs.resetAction}" 
+                                     oncomplete="PF('newLogBookDialog').hide(); return false;" 
+                                     update="newLogBookForm" icon="ui-icon-close" 
+                                     styleClass="layerOneNo"/>
+                </h:form>
+            </p:dialog>
+
+
+            <p:dialog id="newentryDialog"  
+                      modal="true" 
+                      widgetVar="newentryDialog" 
+                      resizable="false" 
+                      closable="true" 
+                      draggable="false"
+                      styleClass="newLogbookEntry" header="Create new entry">
+                <h:form id="newentryForm" prependId="false">
+                    <p:growl id="newentryGrowl" showDetail="true" sticky="false"/>
+                    <p:panelGrid columns="3" id="newEntryGrid">
+                        <p:column colspan="3">
+                            <p:outputLabel for="topicField" value="Topic:"/>
+                            <p:inputText id="topicField" value="#{cc.attrs.backingBean.topicForNewEntry}" required="true" style="margin: 10px;"/>
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:outputLabel for="subTopic" value="Subtopic:"/>
+                            <p:inputText id="subTopic" value="#{cc.attrs.backingBean.subTopicForNewEntry}" required="true" style="margin: 10px;"/>
+                        </p:column>
+                    </p:panelGrid>
+                    <p:separator />
+                    <p:outputLabel for="editor" value="Entrycontent:"/>
+                    <p:editor id="editor" widgetVar="editor" value="#{cc.attrs.backingBean.contentForNewEntry}" width="970" height="425" required="true" validatorMessage="Entrycontent must be filled"/>
+                    <p:commandButton id="newEntryButton" action="#{cc.attrs.saveEntryAction}" process="newentryForm" 
+                                     value="Save"
+                                     update="newentryForm :profileForm:logbook:logbookOVForm:logbookTable"
+                                     oncomplete="if (args &amp;&amp; !args.validationFailed) {PF('newentryDialog').hide();}" 
+                                     icon="ui-icon-disk" 
+                                     styleClass="layerOneYes"/>
+                    <p:commandButton value="Cancel" action="#{cc.attrs.resetAction}" oncomplete="PF('newentryDialog').hide(); return false;" update="newentryForm" icon="ui-icon-close" styleClass="layerOneNo"/>
+                </h:form>
+            </p:dialog>
+        </span>
+    </cc:implementation>
+</html>

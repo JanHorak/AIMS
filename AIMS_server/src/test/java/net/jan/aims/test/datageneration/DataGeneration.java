@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +27,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import net.jan.aims.aimsserver.entities.AIMSMember;
 import net.jan.aims.aimsserver.entities.Abilities;
+import net.jan.aims.aimsserver.entities.LogBook;
+import net.jan.aims.aimsserver.entities.LogBookEntry;
 import net.jan.aims.aimsserver.entities.Rank;
 import net.jan.aims.aimsserver.entities.Skill;
 import net.jan.aims.aimsserver.entities.Talent;
@@ -36,14 +39,31 @@ import net.jan.aims.aimsserver.enums.EnumRank;
 import net.jan.aims.aimsserver.enums.SecurityLevel;
 import net.jan.aims.aimsserver.utilities.Utilities;
 import static org.hamcrest.CoreMatchers.is;
+import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  *
  * @author Jan
  */
 public class DataGeneration {
+
+    private EntityManagerFactory emf;
+    private EntityManager em;
+
+    @Before
+    public void init() {
+        emf = Persistence.createEntityManagerFactory("test");
+        em = emf.createEntityManager();
+    }
+
+    @After
+    public void shutDown() {
+        em.close();
+        emf.close();
+    }
 
     @Test
     public void loadRankImages() {
@@ -64,13 +84,10 @@ public class DataGeneration {
             r.setFileData(Utilities.getBytesOfFile(DIRpath.concat("/").concat(path)));
             assertFalse("Name of the Rank was empty.", r.getName().isEmpty());
         }
-
     }
 
     @Test
     public void loadTestMember() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("test");
-        EntityManager em = emf.createEntityManager();
 
         // Load images
         String clarkPath = getClass().getClassLoader().getResource("images/common/CK.png").getFile();
@@ -98,6 +115,8 @@ public class DataGeneration {
         clark.setPassword("jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=");
         clark.setAbilities(createDefaultAbilities());
         clark.setSecurityLevel(SecurityLevel.SL13);
+        clark.setLogBookList(createLogBookList());
+        clark.getLogBookList().get(0).setOwner(clark);
 
         Set<String> group = new HashSet<>();
         group.add(EnumGroup.Admin.name());
@@ -147,8 +166,6 @@ public class DataGeneration {
 
         int numberOfUsers = em.createQuery("SELECT u FROM AIMSMember u").getResultList().size();
 
-        em.close();
-
         assertThat("Other Result is expected.", numberOfUsers, is(3));
     }
 
@@ -161,7 +178,7 @@ public class DataGeneration {
         List<Talent> talentList = new ArrayList<>();
         List<String> talentsFromFile = getLinesFromFile(getClass().getResource("/talents/Talents").getFile());
         assertThat("Unexptected size", talentsFromFile.size(), is(20));
-        for (String line : talentsFromFile){
+        for (String line : talentsFromFile) {
             Talent talent = new Talent();
             String[] splittedLine = line.split("#");
             talent.setName(splittedLine[0].trim());
@@ -169,12 +186,11 @@ public class DataGeneration {
             talentList.add(talent);
         }
         talentsFromFile.clear();
-        
-        
+
         List<Skill> skillList = new ArrayList<>();
         talentsFromFile = getLinesFromFile(getClass().getResource("/talents/Skills").getFile());
         assertThat("Unexptected size", talentsFromFile.size(), is(20));
-        for (String line : talentsFromFile){
+        for (String line : talentsFromFile) {
             Skill skill = new Skill();
             String[] splittedLine = line.split("#");
             skill.setName(splittedLine[0].trim());
@@ -183,21 +199,17 @@ public class DataGeneration {
             skill.setUpgradeCosts(Integer.parseInt(splittedLine[3].trim()));
             skillList.add(skill);
         }
-        
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("test");
-        EntityManager em = emf.createEntityManager();
-        
+
         em.getTransaction().begin();
-        for (Skill s : skillList){
+        skillList.forEach((s) -> {
             em.persist(s);
-        }
-        for (Talent t : talentList){
+        });
+        talentList.forEach((t) -> {
             em.persist(t);
-        }
-        
+        });
+
         em.getTransaction().commit();
-        em.close();
-        
+
     }
 
     private List<String> getLinesFromFile(String path) {
@@ -219,6 +231,38 @@ public class DataGeneration {
         } catch (IOException ex) {
             Logger.getLogger(DataGeneration.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return resultList;
+    }
+
+    private List<LogBook> createLogBookList() {
+        List<LogBook> resultList = new ArrayList<>();
+
+        LogBook logBook = new LogBook();
+        logBook.setSecurityLevel(SecurityLevel.SL7);
+        Set<EnumPost> tagList = new HashSet<>();
+        tagList.add(EnumPost.SSTFLegeArtis);
+        logBook.setTagList(tagList);
+        logBook.setTitle("Mission IIV of Lege Artis");
+
+        List<LogBookEntry> enties = new ArrayList<>();
+        LogBookEntry e1 = new LogBookEntry();
+        e1.setTopic("Start of Mission");
+        e1.setSubTopic("Saddle up, lock and load!");
+        e1.setContent("blablabla");
+        e1.setTimeOfEntry(LocalDateTime.of(2015, 3, 22, 15, 15));
+        e1.setOwner(logBook);
+        LogBookEntry e2 = new LogBookEntry();
+        e2.setTopic("Important question");
+        e2.setSubTopic("Who the hell are we to determine the next course of evolution for these people?");
+        e2.setContent("blablabla222");
+        e2.setTimeOfEntry(LocalDateTime.of(2015, 12, 29, 15, 15));
+        e2.setOwner(logBook);
+        enties.add(e1);
+        enties.add(e2);
+
+        logBook.setEntries(enties);
+        resultList.add(logBook);
+
         return resultList;
     }
 
