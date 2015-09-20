@@ -8,6 +8,10 @@ package net.jan.aims.aimsserver.utilities;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,9 +20,8 @@ import java.util.logging.Logger;
  * @author Jan
  */
 public abstract class Utilities {
-    
-    
-    public static byte[] getBytesOfFile(String filePath){
+
+    public static byte[] getBytesOfFile(String filePath) {
         byte[] restult = null;
         File f = new File(filePath);
         try {
@@ -26,7 +29,13 @@ public abstract class Utilities {
         } catch (IOException ex) {
             Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return restult;
+    }
+
+    public static <T extends Comparable<? super T>> List<T> asSortedList(Collection<T> c) {
+        List<T> list = new ArrayList<T>(c);
+        Collections.sort(list);
+        return list;
     }
 }

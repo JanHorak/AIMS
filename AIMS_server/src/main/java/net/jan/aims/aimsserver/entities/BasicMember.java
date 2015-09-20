@@ -19,6 +19,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
 import javax.validation.constraints.NotNull;
 import net.jan.aims.aimsserver.enums.EnumGender;
 import org.hibernate.annotations.Cascade;
@@ -53,7 +56,7 @@ public abstract class BasicMember implements Serializable {
 
     @NotNull
     private boolean applicant;
-    
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private EnumGender gender;
@@ -139,6 +142,10 @@ public abstract class BasicMember implements Serializable {
         return applicant;
     }
 
+    public boolean isAdminrights() {
+        return adminrights;
+    }
+
     public void setApplicant(boolean applicant) {
         this.applicant = applicant;
     }
@@ -155,5 +162,5 @@ public abstract class BasicMember implements Serializable {
     public String toString() {
         return "BasicMember{" + "id=" + id + ", email=" + email + ", forename=" + forename + ", lastname=" + lastname + ", password=" + password + ", adminrights=" + adminrights + ", applicant=" + applicant + ", gender=" + gender + ", systemGroup=" + systemGroup + '}';
     }
-    
+
 }

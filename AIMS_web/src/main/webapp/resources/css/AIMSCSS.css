@@ -105,6 +105,26 @@ body {
     bottom: 100%;
 }
 
+.ui-dialog.newLogbookEntry {
+    width: 1000px !important;
+    height: 625px !important;
+    top: 100%;
+    bottom: 100%;
+}
+
+.ui-dialog.displayLogBookEntries {
+    width: 750px !important;
+    height: 550px !important;
+    top: 100%;
+    bottom: 100%;
+}
+
+.displayLogBookEntriesTable td:nth-child(1) {
+    width: 700px !important;
+    height: 350px !important;
+    vertical-align: top;
+}
+
 .ui-panelgrid tr,
 .ui-panelgrid td {
     border: none;

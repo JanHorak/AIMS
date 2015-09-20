@@ -79,7 +79,7 @@ public class PersistenceTest {
         applicantsAfter = usermanager.getAllApplicants();
         em.close();
         
-        assertThat("User is still there.",applicantsAfter.size(), is(applicantsAfter.size()-1));
+        assertThat("User is still there.", is(applicantsAfter.size() == applicantsBefore.size()-1 || applicantsAfter.isEmpty()));
         
     }
 

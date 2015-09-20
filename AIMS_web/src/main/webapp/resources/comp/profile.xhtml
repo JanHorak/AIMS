@@ -5,29 +5,38 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:includes="http://xmlns.jcp.org/jsf/composite/includes">
+      xmlns:includes="http://xmlns.jcp.org/jsf/composite/includes"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:body>
         <ui:composition template="/content/aims/index.xhtml">
             <ui:define name="content">
-                <h:form>
+                <h:form id="profileForm">
                     <h1>Profile</h1>
-                    <p:panelGrid columns="2">
-                        <p:column rowspan="2">
+                    <p:panelGrid columns="2" id="profileGrid">
+                        <p:column colspan="2">
                             <p:fieldset legend="Avatar">
                                 <p:graphicImage value="#{imageHelper.getImageById(profile.member)}" style="height: 128px; width: 128px;" alt="Error">
                                     <f:param id="memberid" name="member_id" value="#{profile.member.id}" />
                                 </p:graphicImage>
                             </p:fieldset>
                             <p:fieldset legend="Personal Data">
-                                <includes:memberData member="#{profile.member}" allFieldsRequired="false"/>
+                                <includes:memberData member="#{profile.member}" allFieldsRequired="false" />
+                            </p:fieldset>
+                            <p:column>
+                                <p:fieldset legend="Abilities">
+                                    <includes:abilities member="#{profile.member}" readonly="true"/>
+                                </p:fieldset>
+                            </p:column>
+                        </p:column>
+
+                        <p:column >
+                            <p:fieldset  legend="LogBooks">
+                                <includes:logbook id="logbook" backingBean="#{logbookBean}" 
+                                                  saveEntryAction="#{logbookBean.saveNewLogBookEntry()}"
+                                                  saveLogBookAction="#{logbookBean.saveNewLogBook()}"
+                                                  resetAction="#{logbookBean.resetInputs}"/>
                             </p:fieldset>
                         </p:column>
-                        <p:fieldset legend="Abilities">
-                            <includes:abilities member="#{profile.member}" readonly="true"/>
-                        </p:fieldset>
-                        <p:fieldset legend="Lookbook-Test">
-                            <p:panel header="Lookbook- content"/>
-                        </p:fieldset>
                         <p:fieldset legend="Talents-Test">
                             <p:panel header="Talents- content"/>
                         </p:fieldset>

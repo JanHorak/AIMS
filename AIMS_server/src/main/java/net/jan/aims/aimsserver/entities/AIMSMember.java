@@ -6,12 +6,18 @@
 package net.jan.aims.aimsserver.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import net.jan.aims.aimsserver.enums.EnumPost;
 import net.jan.aims.aimsserver.enums.EnumRank;
 import net.jan.aims.aimsserver.enums.SecurityLevel;
@@ -40,6 +46,10 @@ public class AIMSMember extends BasicMember implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private SecurityLevel securityLevel;
+
+    @ElementCollection
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = LogBook.class, mappedBy = "owner", fetch = FetchType.EAGER)
+    private List<LogBook> logBookList;
 
     @Embedded
     private Abilities abilities;
@@ -76,4 +86,21 @@ public class AIMSMember extends BasicMember implements Serializable {
         this.post = post;
     }
 
+    public List<LogBook> getLogBookList() {
+        return logBookList;
+    }
+
+    public void setLogBookList(List<LogBook> logBookList) {
+        this.logBookList = logBookList;
+    }
+
+    
+    
+    public List<String> getAllOwnLogBookTitle() {
+        List<String> title = new ArrayList<>();
+        for (LogBook l : logBookList){
+            title.add(l.getTitle());
+        }
+        return title;
+    }
 }
