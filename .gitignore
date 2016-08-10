@@ -38,3 +38,5 @@ nb-configuration.xml
 SAM_MainClient/SAMClient.db
 derby.log
 derby.properties
+
+persistence.xml

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>AIMS</title>
+                <h:outputStylesheet name="css/AIMSCSS.css"/>
+                <script type="text/javascript"  src="http://code.jquery.com/jquery-2.1.4.min.js"/>
+            </f:facet>
+
+        </h:head>
+        <h:body>
+            <ui:composition template="/content/aims/template/template.xhtml">
+                <ui:define name="content">
+                    <h2>Welcome to the Advanced Information and Management System - AIMS</h2>
+
+                    <p:panel id="commonNews" header="News">
+                        <h:outputText value="Common news" />
+                    </p:panel>
+
+                    <p:panel id="adminNews" header="News for admins" rendered="#{menubean.member.isInRole('ADMIN')}">
+                        <h:outputText value="Admin news content" />
+                    </p:panel>
+
+                </ui:define>
+            </ui:composition>
+        </h:body>
+
+    </f:view>
+
+</html>
